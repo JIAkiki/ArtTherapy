@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SereniArt</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="sketch.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        #toolbar {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+        button {
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="toolbar">
+        <button onclick="changeColor('black')">Black</button>
+        <button onclick="changeColor('red')">Red</button>
+        <button onclick="changeColor('blue')">Blue</button>
+        <button onclick="changeColor('green')">Green</button>
+        <button onclick="changeSize(2)">Small</button>
+        <button onclick="changeSize(4)">Medium</button>
+        <button onclick="changeSize(8)">Large</button>
+        <button onclick="clearCanvas()">Clear</button>
+    </div>
+</body>
+</html>
