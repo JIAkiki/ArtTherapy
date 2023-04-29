@@ -41,11 +41,12 @@ async function setup() {
 }
 
 async function loadFaceApiModel() {
-  const MODEL_URL = 'https://unpkg.com/@vladmandic/face-api@1.3.3/model';
+  const MODEL_URL = 'https://raw.githubusercontent.com/justadudewhohacks/face-api.js/master/weights';
   await faceapi.loadSsdMobilenetv1Model(MODEL_URL);
-  await faceapi.loadFaceExpressionModel(MODEL_URL);
-  console.log('Face API model ready!');
+  await faceapi.loadFaceLandmarkModel(MODEL_URL);
+  await faceapi.loadFaceRecognitionModel(MODEL_URL);
 }
+
 
 async function detectFaces() {
   const detections = await faceapi.detectAllFaces(video.elt, new faceapi.SsdMobilenetv1Options()).withFaceExpressions();
