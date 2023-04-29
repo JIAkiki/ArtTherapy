@@ -34,9 +34,10 @@ function setup() {
     video.hide();
 
     const faceapi_options = {
-        withLandmarks: false,
-        withDescriptors: false,
-        withExpressions: true,
+    withLandmarks: false,
+    withDescriptors: false,
+    withExpressions: true,
+    model: 'FaceLandmark68TinyNet'
     };
     faceapi = ml5.faceApi(video, faceapi_options, onFaceapiReady);
 }
