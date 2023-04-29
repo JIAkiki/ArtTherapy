@@ -59,25 +59,26 @@ async function detectFaces() {
 }
 
 function draw() {
-  if (emotions) {
-    let dominantEmotion = Object.keys(emotions).reduce((a, b) => (emotions[a] > emotions[b] ? a : b));
+  clearCanvas();
 
-    if (dominantEmotion === 'happy') {
-      background(255, 255, 100);
-    } else if (dominantEmotion === 'sad') {
-      background(100, 100, 255);
-    } else if (dominantEmotion === 'angry') {
-      background(255, 100, 100);
-    } else {
-      background(255);
+  if (videoReady && faceApiModelReady) {
+    const displaySize = { width: video.width, height: video.height };
+    const detections = faceapi.detectAllFaces(video.elt, options).withFaceLandmarks();
+
+    if (detections && detections.length > 0) {
+      const landmarks = detections[0].landmarks;
+      const nose = landmarks.getNose();
+      const nosePosition = nose[3];
+
+      if (nosePosition) {
+        const colorValue = map(nosePosition.y, 0, video.height, 0, 255);
+        bgColor = color(colorValue, 100, 200);
+      }
     }
   }
 
-  if (mouseIsPressed) {
-    stroke(colorPicker.color());
-    strokeWeight(brushSizeSlider.value());
-    line(mouseX, mouseY, pmouseX, pmouseY);
-  }
+  background(bgColor);
+  image(video, 0, 0, video.width, video.height);
 }
 
 function clearCanvas() {
