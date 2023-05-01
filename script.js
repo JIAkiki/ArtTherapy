@@ -2,6 +2,7 @@ const video = document.getElementById("video");
 const numParticles = 200;
 let audioPlaying = null;
 let timeoutId = null;
+let currentEmotion = "neutral";
 
 Promise.all([
   faceapi.nets.tinyFaceDetector.loadFromUri("models/tiny_face_detector_model"),
