@@ -83,19 +83,26 @@ function playAudio(emotion) {
     return;
   }
 
-  if (intervalId) {
-    clearInterval(intervalId);
+  const currentAudio = document.getElementById(`${audioPlaying}-audio`);
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
   }
 
-  intervalId = setInterval(() => {
-    const audioElement = document.getElementById(`${emotion}-audio`);
-    audioElement.play().then(() => {
-      audioPlaying = emotion;
-    }).catch((error) => {
+  const audioElement = document.getElementById(`${emotion}-audio`);
+  audioElement.play().then(() => {
+    audioPlaying = emotion;
+  }).catch((error) => {
+    console.error('Error playing audio:', error);
+  });
+
+  audioElement.addEventListener('ended', () => {
+    audioElement.play().catch((error) => {
       console.error('Error playing audio:', error);
     });
-  }, 1000);
+  });
 }
+
 
 function initializeAudioPlayback() {
   const audioElements = document.querySelectorAll('audio');
