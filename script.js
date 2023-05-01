@@ -76,23 +76,18 @@ function updateMainEmotion(expressions) {
 }
 
 
+let intervalId = null;
+
 function playAudio(emotion) {
   if (audioPlaying === emotion) {
     return;
   }
 
-  if (timeoutId) {
-    clearTimeout(timeoutId);
+  if (intervalId) {
+    clearInterval(intervalId);
   }
 
-  document.getElementById("happy-audio").pause();
-  document.getElementById("happy-audio").currentTime = 0;
-  document.getElementById("sad-audio").pause();
-  document.getElementById("sad-audio").currentTime = 0;
-  document.getElementById("neutral-audio").pause();
-  document.getElementById("neutral-audio").currentTime = 0;
-
-  timeoutId = setTimeout(() => {
+  intervalId = setInterval(() => {
     const audioElement = document.getElementById(`${emotion}-audio`);
     audioElement.play().then(() => {
       audioPlaying = emotion;
@@ -101,7 +96,6 @@ function playAudio(emotion) {
     });
   }, 1000);
 }
-
 
 function initializeAudioPlayback() {
   const audioElements = document.querySelectorAll('audio');
