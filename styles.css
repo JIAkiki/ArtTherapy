@@ -23,16 +23,21 @@ video {
   z-index: 2;
 }
 
+.container {
+  position: relative;
+}
+
 .emotion-text {
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 32px;
+  font-size: 48px;
   font-weight: bold;
   color: white;
-  text-align: center;
-  text-shadow: 2px 2px 4px #000;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  z-index: 2;
 }
+
 
 
