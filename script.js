@@ -96,5 +96,5 @@ function playAudio(emotion) {
     const audioElement = document.getElementById(`${emotion}-audio`);
     audioElement.play();
     audioPlaying = emotion;
-  }, 2000);
+  }, 1000);
 }
