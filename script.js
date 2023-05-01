@@ -25,7 +25,18 @@ video.addEventListener("play", () => {
       .withFaceExpressions();
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
     canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-    faceapi.draw.drawDetections(canvas, resizedDetections);
+    setInterval(async () => {
+      const detections = await faceapi
+        .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+        .withFaceExpressions();
+      const resizedDetections = faceapi.resizeResults(detections, displaySize);
+      canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+      faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
+      if (detections[0]) {
+        updateMainEmotion(detections[0].expressions);
+      }
+    }, 100);
+
     faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
     if (detections[0]) {
       updateMainEmotion(detections[0].expressions);
