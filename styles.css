@@ -1,25 +1,33 @@
 body {
-  font-family: Arial, sans-serif;
+  margin: 0;
+  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  margin: 0;
-  background-color: #f0f0f0;
+  width: 100vw;
+  position: relative;
 }
 
-.container {
-  text-align: center;
-  background-color: white;
-  padding: 2rem;
-  border-radius: 1rem;
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
 }
 
-h1 {
-  margin-bottom: 1rem;
+video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
 }
 
 #emotion-text {
-  margin-top: 1rem;
-  font-size: 2rem;
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  z-index: 3;
+  font-size: 24px;
+  color: #000;
 }
