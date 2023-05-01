@@ -31,10 +31,3 @@ canvas {
   z-index: 2;
 }
 
-#emotion-text {
-  position: absolute;
-  top: 5px;
-  left: 10px;
-  font-size: 24px;
-  z-index: 3;
-}
