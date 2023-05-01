@@ -1,9 +1,9 @@
 let canvas;
 let particles = [];
 let particleColors = {
-  happy: [255, 204, 0],
+  happy: [255, 153, 0],
   sad: [0, 102, 255],
-  neutral: [150, 150, 150],
+  neutral: [0, 255, 0],
 };
 let currentParticleColor = particleColors.neutral;
 
@@ -17,7 +17,7 @@ function setup() {
 }
 
 function draw() {
-  clear(); // Add this line to make the canvas background transparent
+  clear();
   for (let i = 0; i < particles.length; i++) {
     particles[i].createParticle();
     particles[i].moveParticle();
