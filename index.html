@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SereniArt</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-    <script src="https://unpkg.com/ml5@0.12.2/dist/ml5.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.12.0/dist/tf.min.js"></script>
-    <script src="face-api.min.js"></script>
-    <script src="sketch.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/face-api.js/0.22.2/face-api.min.js"></script>
+  <script defer src="script.js"></script>
+  <title>Emotion Detector</title>
 </head>
 <body>
-    <div id="toolbar"></div>
-    <canvas></canvas>
+  <div class="container">
+    <h1>Emotion Detector</h1>
+    <video id="video" width="720" height="560" autoplay muted></video>
+    <p id="emotion-text">Detecting...</p>
+  </div>
 </body>
 </html>
