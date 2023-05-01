@@ -107,7 +107,12 @@ function initializeAudioPlayback() {
 }
 
 function handleFirstInteraction() {
-  initializeAudioPlayback();
+  const audioElements = document.querySelectorAll('audio');
+  audioElements.forEach((audioElement) => {
+    audioElement.play().then(() => {
+      audioElement.pause();
+    });
+  });
   document.removeEventListener('click', handleFirstInteraction);
   document.removeEventListener('touchstart', handleFirstInteraction);
   document.removeEventListener('keypress', handleFirstInteraction);
