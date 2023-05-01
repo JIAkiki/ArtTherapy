@@ -94,30 +94,30 @@ function playAudio(emotion) {
 
   timeoutId = setTimeout(() => {
     const audioElement = document.getElementById(`${emotion}-audio`);
-    audioElement.load(); // Add this line to reload the audio element
-    audioElement.play();
-    audioPlaying = emotion;
+    audioElement.play().then(() => {
+      audioPlaying = emotion;
+    }).catch((error) => {
+      console.error('Error playing audio:', error);
+    });
   }, 1000);
 }
+
 
 function initializeAudioPlayback() {
   const audioElements = document.querySelectorAll('audio');
   audioElements.forEach((audioElement) => {
-    audioElement.play().catch(() => {});
+    audioElement.load();
   });
 }
 
+
 function handleFirstInteraction() {
-  const audioElements = document.querySelectorAll('audio');
-  audioElements.forEach((audioElement) => {
-    audioElement.play().then(() => {
-      audioElement.pause();
-    });
-  });
+  initializeAudioPlayback();
   document.removeEventListener('click', handleFirstInteraction);
   document.removeEventListener('touchstart', handleFirstInteraction);
   document.removeEventListener('keypress', handleFirstInteraction);
 }
+
 
 document.addEventListener('click', handleFirstInteraction);
 document.addEventListener('touchstart', handleFirstInteraction);
