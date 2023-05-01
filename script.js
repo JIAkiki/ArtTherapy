@@ -98,3 +98,22 @@ function playAudio(emotion) {
     audioPlaying = emotion;
   }, 1000);
 }
+
+function initializeAudioPlayback() {
+  const audioElements = document.querySelectorAll('audio');
+  audioElements.forEach((audioElement) => {
+    audioElement.play().catch(() => {});
+  });
+}
+
+function handleFirstInteraction() {
+  initializeAudioPlayback();
+  document.removeEventListener('click', handleFirstInteraction);
+  document.removeEventListener('touchstart', handleFirstInteraction);
+  document.removeEventListener('keypress', handleFirstInteraction);
+}
+
+document.addEventListener('click', handleFirstInteraction);
+document.addEventListener('touchstart', handleFirstInteraction);
+document.addEventListener('keypress', handleFirstInteraction);
+
