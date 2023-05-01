@@ -69,3 +69,16 @@ function updateMainEmotion(expressions) {
       break;
   }
 }
+
+function playAudio(emotion) {
+
+  document.getElementById("happy-audio").pause();
+  document.getElementById("happy-audio").currentTime = 0;
+  document.getElementById("sad-audio").pause();
+  document.getElementById("sad-audio").currentTime = 0;
+  document.getElementById("neutral-audio").pause();
+  document.getElementById("neutral-audio").currentTime = 0;
+
+  const audioElement = document.getElementById(`${emotion}-audio`);
+  audioElement.play();
+}
