@@ -1,8 +1,5 @@
 const video = document.getElementById("video");
 const emotionText = document.getElementById("emotion-text");
-const numParticles = 200;
-let audioPlaying = null;
-let timeoutId = null;
 
 Promise.all([
   faceapi.nets.tinyFaceDetector.loadFromUri("models/tiny_face_detector_model"),
@@ -17,29 +14,25 @@ function startVideo() {
   );
 
   video.addEventListener("loadedmetadata", () => {
-    const displaySize = { width: video.videoWidth, height: video.videoHeight };
-    faceapi.matchDimensions(canvas, displaySize);
+    video.addEventListener("play", () => {
+      const overlayCanvas = document.getElementById("overlay-canvas");
+      const displaySize = { width: video.videoWidth, height: video.videoHeight };
+      faceapi.matchDimensions(overlayCanvas, displaySize);
 
-  video.addEventListener("play", () => {
-    const overlayCanvas = document.getElementById("overlay-canvas");
-    const displaySize = { width: video.videoWidth, height: video.videoHeight };
-    faceapi.matchDimensions(overlayCanvas, displaySize);
-
-    setInterval(async () => {
-      const detections = await faceapi
-        .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
-        .withFaceExpressions();
-      const resizedDetections = faceapi.resizeResults(detections, displaySize);
-      overlayCanvas.getContext("2d").clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
-      faceapi.draw.drawFaceExpressions(overlayCanvas, resizedDetections);
-      if (detections[0]) {
-        updateMainEmotion(detections[0].expressions);
-      }
-    }, 100);
+      setInterval(async () => {
+        const detections = await faceapi
+          .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+          .withFaceExpressions();
+        const resizedDetections = faceapi.resizeResults(detections, displaySize);
+        overlayCanvas.getContext("2d").clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+        faceapi.draw.drawFaceExpressions(overlayCanvas, resizedDetections);
+        if (detections[0]) {
+          updateMainEmotion(detections[0].expressions);
+        }
+      }, 100);
+    });
   });
-
- });
- }
+}
 
 function getMainEmotion(expressions) {
   const emotions = Object.keys(expressions);
@@ -77,14 +70,7 @@ function updateMainEmotion(expressions) {
   }
 }
 
-
-let intervalId = null;
-
 function playAudio(emotion) {
-  if (audioPlaying === emotion) {
-    return;
-  }
-
   const currentAudio = document.getElementById(`${audioPlaying}-audio`);
   if (currentAudio) {
     currentAudio.pause();
@@ -105,14 +91,12 @@ function playAudio(emotion) {
   });
 }
 
-
 function initializeAudioPlayback() {
   const audioElements = document.querySelectorAll('audio');
   audioElements.forEach((audioElement) => {
     audioElement.load();
   });
 }
-
 
 function handleFirstInteraction() {
   initializeAudioPlayback();
@@ -121,8 +105,6 @@ function handleFirstInteraction() {
   document.removeEventListener('keypress', handleFirstInteraction);
 }
 
-
 document.addEventListener('click', handleFirstInteraction);
 document.addEventListener('touchstart', handleFirstInteraction);
 document.addEventListener('keypress', handleFirstInteraction);
-
