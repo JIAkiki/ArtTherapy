@@ -4,9 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
-  <audio id="happy-audio" src="audio/happy.mp3" preload="auto" type="audio/mpeg"></audio>
-  <audio id="sad-audio" src="audio/sad.mp3" preload="auto" type="audio/mpeg"></audio>
-  <audio id="neutral-audio" src="audio/neutral.mp3" preload="auto" type="audio/mpeg"></audio>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
   <script src="pattern.js" defer></script>
   <script defer src="libs/face-api.min.js"></script>
@@ -16,7 +13,11 @@
 <body>
   <div class="container">
     <h1>Emotion Detector</h1>
-    <video id="video" autoplay muted playsinline></video>
+    <video id="video" class="video" autoplay muted playsinline></video>
+    <p id="emotion-text" class="emotion-text"></p>
   </div>
+  <audio id="happy-audio" src="audio/happy.mp3" preload="auto" type="audio/mpeg"></audio>
+  <audio id="sad-audio" src="audio/sad.mp3" preload="auto" type="audio/mpeg"></audio>
+  <audio id="neutral-audio" src="audio/neutral.mp3" preload="auto" type="audio/mpeg"></audio>
 </body>
 </html>
