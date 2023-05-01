@@ -3,9 +3,7 @@ const emotionText = document.getElementById("emotion-text");
 
 Promise.all([
   faceapi.nets.tinyFaceDetector.loadFromUri("models/tiny_face_detector_model"),
-  faceapi.nets.faceExpressionNet.loadFromUri("models/face_expression_model")
-
-
+  faceapi.nets.faceExpressionNet.loadFromUri("models/face_expression_model"),
 ]).then(startVideo);
 
 function startVideo() {
@@ -21,37 +19,49 @@ video.addEventListener("play", () => {
   document.body.append(canvas);
   const displaySize = { width: video.width, height: video.height };
   faceapi.matchDimensions(canvas, displaySize);
-
   setInterval(async () => {
     const detections = await faceapi
       .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
       .withFaceExpressions();
-
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
     canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-
+    faceapi.draw.drawDetections(canvas, resizedDetections);
+    faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
     if (detections[0]) {
-      const emotions = detections[0].expressions;
-      const maxValue = Math.max(...Object.values(emotions));
-      const mainEmotion = Object.keys(emotions).find(
-        (key) => emotions[key] === maxValue
-      );
-
-      switch (mainEmotion) {
-        case "happy":
-          emotionText.textContent = "Happy";
-          break;
-        case "sad":
-          emotionText.textContent = "Sad";
-          break;
-        case "neutral":
-          emotionText.textContent = "Normal";
-          break;
-        default:
-          emotionText.textContent = "Detecting...";
-      }
-    } else {
-      emotionText.textContent = "Detecting...";
+      updateMainEmotion(detections[0].expressions);
     }
   }, 100);
 });
+
+function getMainEmotion(expressions) {
+  const emotions = Object.keys(expressions);
+  let mainEmotion = emotions[0];
+  let maxConfidence = expressions[mainEmotion];
+
+  emotions.forEach((emotion) => {
+    if (expressions[emotion] > maxConfidence) {
+      mainEmotion = emotion;
+      maxConfidence = expressions[emotion];
+    }
+  });
+
+  return mainEmotion;
+}
+
+function updateMainEmotion(expressions) {
+  const mainEmotion = getMainEmotion(expressions);
+  switch (mainEmotion) {
+    case "happy":
+      emotionText.textContent = "Happy";
+      updatePattern("happy");
+      break;
+    case "sad":
+      emotionText.textContent = "Sad";
+      updatePattern("sad");
+      break;
+    default:
+      emotionText.textContent = "Normal";
+      updatePattern("neutral");
+      break;
+  }
+}
