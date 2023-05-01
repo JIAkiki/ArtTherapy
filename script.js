@@ -1,5 +1,7 @@
 const video = document.getElementById("video");
-const emotionText = document.getElementById("emotion-text");
+const numParticles = 200;
+let audioPlaying = null;
+let timeoutId = null;
 
 Promise.all([
   faceapi.nets.tinyFaceDetector.loadFromUri("models/tiny_face_detector_model"),
@@ -14,18 +16,20 @@ function startVideo() {
   );
 
   video.addEventListener("loadedmetadata", () => {
+    const displaySize = { width: video.videoWidth, height: video.videoHeight };
+    faceapi.matchDimensions(canvas, displaySize);
+
     video.addEventListener("play", () => {
-      const overlayCanvas = document.getElementById("overlay-canvas");
-      const displaySize = { width: video.videoWidth, height: video.videoHeight };
-      faceapi.matchDimensions(overlayCanvas, displaySize);
+      const canvas = faceapi.createCanvasFromMedia(video);
+      document.body.append(canvas);
 
       setInterval(async () => {
         const detections = await faceapi
           .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
           .withFaceExpressions();
         const resizedDetections = faceapi.resizeResults(detections, displaySize);
-        overlayCanvas.getContext("2d").clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
-        faceapi.draw.drawFaceExpressions(overlayCanvas, resizedDetections);
+        canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+        faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
         if (detections[0]) {
           updateMainEmotion(detections[0].expressions);
         }
@@ -53,24 +57,27 @@ function updateMainEmotion(expressions) {
   const mainEmotion = getMainEmotion(expressions);
   switch (mainEmotion) {
     case "happy":
-      emotionText.textContent = "Happy";
       updatePattern("happy");
       playAudio("happy");
       break;
     case "sad":
-      emotionText.textContent = "Sad";
       updatePattern("sad");
       playAudio("sad");
       break;
     default:
-      emotionText.textContent = "Normal";
       updatePattern("neutral");
       playAudio("neutral");
       break;
   }
 }
 
+let intervalId = null;
+
 function playAudio(emotion) {
+  if (audioPlaying === emotion) {
+    return;
+  }
+
   const currentAudio = document.getElementById(`${audioPlaying}-audio`);
   if (currentAudio) {
     currentAudio.pause();
