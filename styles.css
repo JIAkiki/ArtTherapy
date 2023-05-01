@@ -25,11 +25,11 @@ video {
 
 #emotion-text {
   position: absolute;
-  font-size: 36px; /* Increase the font size */
-  bottom: 20px; /* Add some space from the bottom */
-  left: 50%; /* Center the text horizontally */
-  transform: translateX(-50%); /* Adjust the horizontal position */
+  font-size: 106px; 
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   color: white;
-  z-index: 1; /* Make sure the text is on top of other elements */
+  z-index: 1; 
 }
 
