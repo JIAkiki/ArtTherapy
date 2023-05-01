@@ -24,10 +24,7 @@ video {
 }
 
 #emotion-text {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  z-index: 3;
-  font-size: 24px;
-  color: #000;
+  font-size: 36px; /* Increase the font size */
+  margin-top: 20px; /* Add some space between the video and the text */
 }
+
