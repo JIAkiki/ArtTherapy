@@ -94,6 +94,7 @@ function playAudio(emotion) {
 
   timeoutId = setTimeout(() => {
     const audioElement = document.getElementById(`${emotion}-audio`);
+    audioElement.load(); // Add this line to reload the audio element
     audioElement.play();
     audioPlaying = emotion;
   }, 1000);
