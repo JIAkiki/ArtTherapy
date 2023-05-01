@@ -7,14 +7,14 @@ const colors = {
 let particles = [];
 
 function setup() {
-  createCanvas(windowWidth, windowHeight, WEBGL);
+  createCanvas(windowWidth, windowHeight);
   for (let i = 0; i < numParticles; i++) {
     particles[i] = new Particle(random(width), random(height));
   }
 }
 
 function draw() {
-  background(0, 0, 0, 25);
+  background(0, 0, 0, 0);
   for (let i = 0; i < particles.length; i++) {
     particles[i].update();
     particles[i].show();
