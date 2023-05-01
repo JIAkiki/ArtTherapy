@@ -1,6 +1,8 @@
 const video = document.getElementById("video");
 const emotionText = document.getElementById("emotion-text");
 const numParticles = 200;
+let audioPlaying = null;
+let timeoutId = null;
 
 Promise.all([
   faceapi.nets.tinyFaceDetector.loadFromUri("models/tiny_face_detector_model"),
@@ -75,6 +77,13 @@ function updateMainEmotion(expressions) {
 
 
 function playAudio(emotion) {
+  if (audioPlaying === emotion) {
+    return;
+  }
+
+  if (timeoutId) {
+    clearTimeout(timeoutId);
+  }
 
   document.getElementById("happy-audio").pause();
   document.getElementById("happy-audio").currentTime = 0;
@@ -83,6 +92,9 @@ function playAudio(emotion) {
   document.getElementById("neutral-audio").pause();
   document.getElementById("neutral-audio").currentTime = 0;
 
-  const audioElement = document.getElementById(`${emotion}-audio`);
-  audioElement.play();
+  timeoutId = setTimeout(() => {
+    const audioElement = document.getElementById(`${emotion}-audio`);
+    audioElement.play();
+    audioPlaying = emotion;
+  }, 2000);
 }
