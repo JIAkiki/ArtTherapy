@@ -12,37 +12,29 @@ function startVideo() {
     (stream) => (video.srcObject = stream),
     (err) => console.error(err)
   );
+
+  video.addEventListener("loadedmetadata", () => {
+    const displaySize = { width: video.videoWidth, height: video.videoHeight };
+    faceapi.matchDimensions(canvas, displaySize);
+
+    video.addEventListener("play", () => {
+      const canvas = faceapi.createCanvasFromMedia(video);
+      document.body.append(canvas);
+
+      setInterval(async () => {
+        const detections = await faceapi
+          .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+          .withFaceExpressions();
+        const resizedDetections = faceapi.resizeResults(detections, displaySize);
+        canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+        faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
+        if (detections[0]) {
+          updateMainEmotion(detections[0].expressions);
+        }
+      }, 100);
+    });
+  });
 }
-
-video.addEventListener("play", () => {
-  const canvas = faceapi.createCanvasFromMedia(video);
-  document.body.append(canvas);
-  const displaySize = { width: video.width, height: video.height };
-  faceapi.matchDimensions(canvas, displaySize);
-  setInterval(async () => {
-    const detections = await faceapi
-      .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
-      .withFaceExpressions();
-    const resizedDetections = faceapi.resizeResults(detections, displaySize);
-    canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-    setInterval(async () => {
-      const detections = await faceapi
-        .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
-        .withFaceExpressions();
-      const resizedDetections = faceapi.resizeResults(detections, displaySize);
-      canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-      faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
-      if (detections[0]) {
-        updateMainEmotion(detections[0].expressions);
-      }
-    }, 100);
-
-    faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
-    if (detections[0]) {
-      updateMainEmotion(detections[0].expressions);
-    }
-  }, 100);
-});
 
 function getMainEmotion(expressions) {
   const emotions = Object.keys(expressions);
