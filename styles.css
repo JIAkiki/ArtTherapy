@@ -5,16 +5,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  font-family: Arial, sans-serif;
-}
-
-.container {
-  position: relative;
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
+  background-color: black;
 }
 
 video {
@@ -30,4 +21,3 @@ canvas {
   left: 0;
   z-index: 2;
 }
-
