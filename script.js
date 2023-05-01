@@ -20,24 +20,26 @@ function startVideo() {
     const displaySize = { width: video.videoWidth, height: video.videoHeight };
     faceapi.matchDimensions(canvas, displaySize);
 
-    video.addEventListener("play", () => {
-      const canvas = faceapi.createCanvasFromMedia(video);
-      document.body.append(canvas);
+  video.addEventListener("play", () => {
+    const overlayCanvas = document.getElementById("overlay-canvas");
+    const displaySize = { width: video.videoWidth, height: video.videoHeight };
+    faceapi.matchDimensions(overlayCanvas, displaySize);
 
-      setInterval(async () => {
-        const detections = await faceapi
-          .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
-          .withFaceExpressions();
-        const resizedDetections = faceapi.resizeResults(detections, displaySize);
-        canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-        faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
-        if (detections[0]) {
-          updateMainEmotion(detections[0].expressions);
-        }
-      }, 100);
-    });
+    setInterval(async () => {
+      const detections = await faceapi
+        .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+        .withFaceExpressions();
+      const resizedDetections = faceapi.resizeResults(detections, displaySize);
+      overlayCanvas.getContext("2d").clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+      faceapi.draw.drawFaceExpressions(overlayCanvas, resizedDetections);
+      if (detections[0]) {
+        updateMainEmotion(detections[0].expressions);
+      }
+    }, 100);
   });
-}
+
+ });
+ }
 
 function getMainEmotion(expressions) {
   const emotions = Object.keys(expressions);
