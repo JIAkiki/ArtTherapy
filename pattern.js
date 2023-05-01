@@ -1,56 +1,69 @@
-const colors = {
-  happy: "#FFD700",
-  sad: "#3498db",
-  neutral: "#95a5a6",
-};
 let canvas;
 let particles = [];
+let particleColors = {
+  happy: [255, 204, 0],
+  sad: [0, 102, 255],
+  neutral: [150, 150, 150],
+};
+let currentParticleColor = particleColors.neutral;
 
 function setup() {
   canvas = createCanvas(windowWidth, windowHeight);
   canvas.position(0, 0);
   canvas.style('z-index', '-1');
-  canvas.style('background-color', 'rgba(0,0,0,0)');
-  
   for (let i = 0; i < numParticles; i++) {
-    particles[i] = new Particle(random(width), random(height));
+    particles.push(new Particle());
   }
 }
 
 function draw() {
-  background(0, 0, 0, 0);
+  clear(); // Add this line to make the canvas background transparent
   for (let i = 0; i < particles.length; i++) {
-    particles[i].update();
+    particles[i].createParticle();
+    particles[i].moveParticle();
     particles[i].show();
   }
 }
 
 class Particle {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-    this.vx = random(-1, 1);
-    this.vy = random(-1, 1);
-    this.alpha = 255;
+  constructor() {
+    this.x = random(0, width);
+    this.y = random(0, height);
+    this.size = random(15, 30);
+    this.speedX = random(-1, 1);
+    this.speedY = random(-1, 1);
   }
 
-  update() {
-    this.x += this.vx;
-    this.y += this.vy;
-    this.alpha -= 3;
+  createParticle() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+
+    if (this.size > 0) {
+      this.size -= 0.05;
+    }
+  }
+
+  moveParticle() {
+    if (this.x < 0 || this.x > width) {
+      this.speedX *= -1;
+    }
+
+    if (this.y < 0 || this.y > height) {
+      this.speedY *= -1;
+    }
   }
 
   show() {
     noStroke();
-    fill(colors[currentEmotion], this.alpha);
-    ellipse(this.x, this.y, 4);
+    fill(currentParticleColor[0], currentParticleColor[1], currentParticleColor[2], this.size * 10);
+    circle(this.x, this.y, this.size);
   }
+}
+
+function updatePattern(emotion) {
+  currentParticleColor = particleColors[emotion];
 }
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
-}
-
-function updatePattern(emotion) {
-  currentEmotion = emotion;
 }
