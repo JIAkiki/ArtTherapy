@@ -1,31 +1,52 @@
-let emotionColors = {
-  happy: ['#FFD700', '#FFA500', '#FF6347'],
-  sad: ['#6495ED', '#4169E1', '#6A5ACD'],
-  neutral: ['#90EE90', '#3CB371', '#2E8B57'],
+const colors = {
+  happy: "#FFD700",
+  sad: "#3498db",
+  neutral: "#95a5a6",
 };
 
-let currentEmotion = 'neutral';
+let particles = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  noLoop();
+  for (let i = 0; i < numParticles; i++) {
+    particles[i] = new Particle(random(width), random(height));
+  }
 }
 
 function draw() {
-  background(255);
-  let colors = emotionColors[currentEmotion];
-
-  for (let x = 0; x < windowWidth; x += 20) {
-    for (let y = 0; y < windowHeight; y += 20) {
-      let index = floor(random(colors.length));
-      fill(colors[index]);
-      noStroke();
-      ellipse(x, y, 15, 15);
-    }
+  background(0, 25);
+  for (let i = 0; i < particles.length; i++) {
+    particles[i].update();
+    particles[i].show();
   }
+}
+
+class Particle {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.vx = random(-1, 1);
+    this.vy = random(-1, 1);
+    this.alpha = 255;
+  }
+
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.alpha -= 3;
+  }
+
+  show() {
+    noStroke();
+    fill(colors[currentEmotion], this.alpha);
+    ellipse(this.x, this.y, 4);
+  }
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
 
 function updatePattern(emotion) {
   currentEmotion = emotion;
-  redraw();
 }
