@@ -2,8 +2,9 @@ const video = document.getElementById("video");
 const emotionText = document.getElementById("emotion-text");
 
 Promise.all([
-  faceapi.nets.tinyFaceDetector.loadFromUri("/models"),
-  faceapi.nets.faceExpressionNet.loadFromUri("/models")
+  faceapi.nets.tinyFaceDetector.loadFromUri("libs"),
+  faceapi.nets.faceExpressionNet.loadFromUri("libs")
+
 ]).then(startVideo);
 
 function startVideo() {
