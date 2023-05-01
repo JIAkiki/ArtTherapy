@@ -15,8 +15,8 @@ function draw() {
   background(255);
   let colors = emotionColors[currentEmotion];
 
-  for (let x = 0; x < width; x += 20) {
-    for (let y = 0; y < height; y += 20) {
+  for (let x = 0; x < windowWidth; x += 20) {
+    for (let y = 0; y < windowHeight; y += 20) {
       let index = floor(random(colors.length));
       fill(colors[index]);
       noStroke();
