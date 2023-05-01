@@ -58,17 +58,21 @@ function updateMainEmotion(expressions) {
     case "happy":
       emotionText.textContent = "Happy";
       updatePattern("happy");
+      playAudio("happy");
       break;
     case "sad":
       emotionText.textContent = "Sad";
       updatePattern("sad");
+      playAudio("sad");
       break;
     default:
       emotionText.textContent = "Normal";
       updatePattern("neutral");
+      playAudio("neutral");
       break;
   }
 }
+
 
 function playAudio(emotion) {
 
