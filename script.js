@@ -1,5 +1,6 @@
 const video = document.getElementById("video");
 const emotionText = document.getElementById("emotion-text");
+const numParticles = 200;
 
 Promise.all([
   faceapi.nets.tinyFaceDetector.loadFromUri("models/tiny_face_detector_model"),
