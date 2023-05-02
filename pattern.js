@@ -1,5 +1,6 @@
-let canvas;
+const numParticles = 200;
 let particles = [];
+
 let particleColors = {
   happy: [255, 153, 0],
   sad: [0, 102, 255],
@@ -8,55 +9,47 @@ let particleColors = {
 let currentParticleColor = particleColors.neutral;
 
 function setup() {
-  canvas = createCanvas(windowWidth, windowHeight);
-  canvas.position(0, 0);
-  canvas.style('z-index', '-1');
+  createCanvas(windowWidth, windowHeight);
   for (let i = 0; i < numParticles; i++) {
-    particles.push(new Particle());
+    particles[i] = new Particle();
   }
 }
 
 function draw() {
-  clear();
+  background(255);
   for (let i = 0; i < particles.length; i++) {
-    particles[i].createParticle();
-    particles[i].moveParticle();
+    particles[i].update();
     particles[i].show();
   }
 }
 
 class Particle {
   constructor() {
-    this.x = random(0, width);
-    this.y = random(0, height);
+    this.position = createVector(random(width), random(height));
+    this.velocity = createVector(random(-1, 1), random(-1, 1));
+    this.acceleration = createVector(0, 0);
+    this.maxSpeed = 2;
     this.size = random(15, 30);
-    this.speedX = random(-1, 1);
-    this.speedY = random(-1, 1);
   }
 
-  createParticle() {
-    this.x += this.speedX;
-    this.y += this.speedY;
+  update() {
+    this.position.add(this.velocity);
+    this.velocity.add(this.acceleration);
+    this.velocity.limit(this.maxSpeed);
+    this.acceleration.mult(0);
 
-    if (this.size > 0) {
-      this.size -= 0.05;
+    if (this.position.x > width || this.position.x < 0) {
+      this.velocity.x *= -1;
     }
-  }
-
-  moveParticle() {
-    if (this.x < 0 || this.x > width) {
-      this.speedX *= -1;
-    }
-
-    if (this.y < 0 || this.y > height) {
-      this.speedY *= -1;
+    if (this.position.y > height || this.position.y < 0) {
+      this.velocity.y *= -1;
     }
   }
 
   show() {
     noStroke();
     fill(currentParticleColor[0], currentParticleColor[1], currentParticleColor[2], this.size * 10);
-    circle(this.x, this.y, this.size);
+    circle(this.position.x, this.position.y, this.size);
   }
 }
 
