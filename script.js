@@ -1,8 +1,8 @@
 const video = document.getElementById("video");
+const emotionText = document.getElementById("emotion-text");
 const numParticles = 200;
 let audioPlaying = null;
 let timeoutId = null;
-let currentEmotion = "neutral";
 
 Promise.all([
   faceapi.nets.tinyFaceDetector.loadFromUri("models/tiny_face_detector_model"),
@@ -58,19 +58,23 @@ function updateMainEmotion(expressions) {
   const mainEmotion = getMainEmotion(expressions);
   switch (mainEmotion) {
     case "happy":
+      emotionText.textContent = "Happy";
       updatePattern("happy");
       playAudio("happy");
       break;
     case "sad":
+      emotionText.textContent = "Sad";
       updatePattern("sad");
       playAudio("sad");
       break;
     default:
+      emotionText.textContent = "Normal";
       updatePattern("neutral");
       playAudio("neutral");
       break;
   }
 }
+
 
 let intervalId = null;
 
@@ -106,12 +110,14 @@ function initializeAudioPlayback() {
   });
 }
 
+
 function handleFirstInteraction() {
   initializeAudioPlayback();
   document.removeEventListener('click', handleFirstInteraction);
   document.removeEventListener('touchstart', handleFirstInteraction);
   document.removeEventListener('keypress', handleFirstInteraction);
 }
+
 
 document.addEventListener('click', handleFirstInteraction);
 document.addEventListener('touchstart', handleFirstInteraction);
