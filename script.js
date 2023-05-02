@@ -1,14 +1,19 @@
+// Get the video and emotion text elements from the HTML
 const video = document.getElementById("video");
 const emotionText = document.getElementById("emotion-text");
+
+// Initialize variables
 const numParticles = 200;
 let audioPlaying = null;
 let timeoutId = null;
 
+// Load the face detection and face expression models
 Promise.all([
   faceapi.nets.tinyFaceDetector.loadFromUri("models/tiny_face_detector_model"),
   faceapi.nets.faceExpressionNet.loadFromUri("models/face_expression_model"),
 ]).then(startVideo);
 
+// Start the video stream and setup face detection
 function startVideo() {
   navigator.getUserMedia(
     { video: {} },
@@ -16,14 +21,17 @@ function startVideo() {
     (err) => console.error(err)
   );
 
+  // When the video metadata is loaded, setup canvas and face expression detection
   video.addEventListener("loadedmetadata", () => {
     const displaySize = { width: video.videoWidth, height: video.videoHeight };
     faceapi.matchDimensions(canvas, displaySize);
 
+    // When the video starts playing, setup face detection loop
     video.addEventListener("play", () => {
       const canvas = faceapi.createCanvasFromMedia(video);
       document.body.append(canvas);
 
+      // Detect faces and expressions every 100ms
       setInterval(async () => {
         const detections = await faceapi
           .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
@@ -39,6 +47,7 @@ function startVideo() {
   });
 }
 
+// Get the main emotion from the face expressions
 function getMainEmotion(expressions) {
   const emotions = Object.keys(expressions);
   let mainEmotion = emotions[0];
@@ -54,6 +63,7 @@ function getMainEmotion(expressions) {
   return mainEmotion;
 }
 
+// Update the displayed emotion and pattern
 function updateMainEmotion(expressions) {
   const mainEmotion = getMainEmotion(expressions);
   switch (mainEmotion) {
@@ -75,9 +85,9 @@ function updateMainEmotion(expressions) {
   }
 }
 
-
 let intervalId = null;
 
+// Play the audio corresponding to the emotion
 function playAudio(emotion) {
   if (audioPlaying === emotion) {
     return;
@@ -100,25 +110,3 @@ function playAudio(emotion) {
     audioElement.play().catch((error) => {
       console.error('Error playing audio:', error);
     });
-  });
-}
-
-function initializeAudioPlayback() {
-  const audioElements = document.querySelectorAll('audio');
-  audioElements.forEach((audioElement) => {
-    audioElement.load();
-  });
-}
-
-
-function handleFirstInteraction() {
-  initializeAudioPlayback();
-  document.removeEventListener('click', handleFirstInteraction);
-  document.removeEventListener('touchstart', handleFirstInteraction);
-  document.removeEventListener('keypress', handleFirstInteraction);
-}
-
-
-document.addEventListener('click', handleFirstInteraction);
-document.addEventListener('touchstart', handleFirstInteraction);
-document.addEventListener('keypress', handleFirstInteraction);
