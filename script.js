@@ -106,7 +106,31 @@ function playAudio(emotion) {
     console.error('Error playing audio:', error);
   });
 
-  audioElement.addEventListener('ended', () => {
-    audioElement.play().catch((error) => {
-      console.error('Error playing audio:', error);
+    audioElement.addEventListener('ended', () => {
+      audioElement.play().catch((error) => {
+        console.error('Error playing audio:', error);
+      });
     });
+}
+
+// Initialize audio playback
+function initializeAudioPlayback() {
+  const audioElements = document.querySelectorAll('audio');
+  audioElements.forEach((audioElement) => {
+    audioElement.load();
+  });
+}
+
+// Handle the first user interaction
+function handleFirstInteraction() {
+  initializeAudioPlayback();
+  document.removeEventListener('click', handleFirstInteraction);
+  document.removeEventListener('touchstart', handleFirstInteraction);
+  document.removeEventListener('keypress', handleFirstInteraction);
+}
+
+// Add event listeners for user interactions
+document.addEventListener('click', handleFirstInteraction);
+document.addEventListener('touchstart', handleFirstInteraction);
+document.addEventListener('keypress', handleFirstInteraction);
+
