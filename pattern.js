@@ -1,62 +1,31 @@
-const numParticles = 200;
-let particles = [];
-
-let particleColors = {
-  happy: [255, 153, 0],
-  sad: [0, 102, 255],
-  neutral: [0, 255, 0],
+let emotionColors = {
+  happy: ['#FFD700', '#FFA500', '#FF6347'],
+  sad: ['#6495ED', '#4169E1', '#6A5ACD'],
+  neutral: ['#90EE90', '#3CB371', '#2E8B57'],
 };
-let currentParticleColor = particleColors.neutral;
+
+let currentEmotion = 'neutral';
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  for (let i = 0; i < numParticles; i++) {
-    particles[i] = new Particle();
-  }
+  noLoop();
 }
 
 function draw() {
   background(255);
-  for (let i = 0; i < particles.length; i++) {
-    particles[i].update();
-    particles[i].show();
-  }
-}
+  let colors = emotionColors[currentEmotion];
 
-class Particle {
-  constructor() {
-    this.position = createVector(random(width), random(height));
-    this.velocity = createVector(random(-1, 1), random(-1, 1));
-    this.acceleration = createVector(0, 0);
-    this.maxSpeed = 2;
-    this.size = random(15, 30);
-  }
-
-  update() {
-    this.position.add(this.velocity);
-    this.velocity.add(this.acceleration);
-    this.velocity.limit(this.maxSpeed);
-    this.acceleration.mult(0);
-
-    if (this.position.x > width || this.position.x < 0) {
-      this.velocity.x *= -1;
+  for (let x = 0; x < width; x += 20) {
+    for (let y = 0; y < height; y += 20) {
+      let index = floor(random(colors.length));
+      fill(colors[index]);
+      noStroke();
+      ellipse(x, y, 15, 15);
     }
-    if (this.position.y > height || this.position.y < 0) {
-      this.velocity.y *= -1;
-    }
-  }
-
-  show() {
-    noStroke();
-    fill(currentParticleColor[0], currentParticleColor[1], currentParticleColor[2], this.size * 10);
-    circle(this.position.x, this.position.y, this.size);
   }
 }
 
 function updatePattern(emotion) {
-  currentParticleColor = particleColors[emotion];
-}
-
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
+  currentEmotion = emotion;
+  redraw();
 }
